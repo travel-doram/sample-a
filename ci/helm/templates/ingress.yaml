@@ -1,0 +1,43 @@
+{{- if .Values.ingress.external.enabled -}}
+{{- $serviceName := .Values.service.name -}}
+{{- $servicePort := .Values.service.externalPort -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ template "sample-a.fullname" . }}-external
+  labels:
+{{ include "sample-a.labels" . | indent 4 }}
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 20m
+    #nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8"  
+    {{- range $key, $value := .Values.ingress.external.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+    {{- if .Values.ingress.external.robotsNoIndex }}
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Robots-Tag: noindex";
+    {{- end }}
+spec:
+  ingressClassName: {{ .Values.ingress.external.ingressClassName }}
+  rules:
+  {{- range $host := .Values.ingress.external.hosts }}
+  - host: {{ $host }}
+    http:
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: {{ $serviceName }}
+            port:
+              number: {{ $servicePort }}
+  {{- end -}}
+  {{- if .Values.ingress.external.tls }}
+  tls:
+  {{- range $host := .Values.ingress.external.hosts }}
+  - secretName: {{ $host | include "sample-a.utils.tls" }}
+    hosts:
+    - {{ $host }}
+  {{- end -}}
+  {{- end -}}
+{{- end -}}

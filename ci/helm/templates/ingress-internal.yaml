@@ -1,0 +1,39 @@
+{{- if .Values.ingress.internal.enabled -}}
+{{- $serviceName := .Values.service.name -}}
+{{- $servicePort := .Values.service.externalPort -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ template "sample-a.fullname" . }}-internal
+  labels:
+{{ include "sample-a.labels" . | indent 4 }}
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 20m
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.0.0.0/8"
+    {{- range $key, $value := .Values.ingress.internal.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  ingressClassName: {{ .Values.ingress.internal.ingressClassName }}
+  rules:
+  {{- range $host := .Values.ingress.internal.hosts }}
+  - host: {{ $host }}
+    http:
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: {{ $serviceName }}
+            port:
+              number: {{ $servicePort }}
+  {{- end -}}
+  {{- if .Values.ingress.internal.tls }}
+  tls:
+  {{- range $host := .Values.ingress.internal.hosts }}
+  - secretName: {{ $host | include "sample-a.utils.tls" }}
+    hosts:
+    - {{ $host }}
+  {{- end -}}
+  {{- end -}}
+{{- end -}}
