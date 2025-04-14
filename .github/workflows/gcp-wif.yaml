@@ -22,11 +22,6 @@ jobs:
           token_format: "access_token"
           workload_identity_provider: projects/481994439242/locations/global/workloadIdentityPools/github-oidc-ts-infra-demo/providers/github-oidc-ts-infra-demo
           service_account: github-oidc@ts-infra-demo.iam.gserviceaccount.com
-
-      - name: "Docker login"
-        run: |
-          echo '${{ steps.auth.outputs.access_token }}' | docker login -u oauth2accesstoken --password-stdin https://europe-west4-docker.pkg.dev/ts-infra-demo/private
-
       - name: "build container"
         run: ENVPREFIX=demo ci/build.sh
       - uses: "google-github-actions/setup-gcloud@v2"
