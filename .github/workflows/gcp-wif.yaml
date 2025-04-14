@@ -24,3 +24,7 @@ jobs:
       - name: "Docker login"
         run: |
           echo '${{ steps.auth.outputs.access_token }}' | docker login -u oauth2accesstoken --password-stdin https://europe-west4-docker.pkg.dev/ts-infra-demo/private
+      - name: Check out the repository to the runner
+        uses: actions/checkout@v4  
+      - name: "build container"
+        run: ENVPREFIX=demo ci/build.sh

@@ -14,12 +14,6 @@ CONFIGPATH=$WORKDIR/auth
 ENVFILE=${CONFIGPATH}/.env.${ENVPREFIX}
 set -o allexport
 source ${ENVFILE}
-# Bypass bitbucket commit re-formatting if it doesn't match sha1 regex
-SHA1_REGEX="^[0-9a-f]{5,40}$"
-if [[ $BITBUCKET_COMMIT =~ $SHA1_REGEX ]];
-then
-    BITBUCKET_COMMIT=$(git log -1 --format="%H" $BITBUCKET_COMMIT 2>/dev/null)
-fi
 set +o allexport
 
 authKubeGcloud () {
@@ -34,9 +28,14 @@ googleAuthentication () {
     then
         gcloud config set project ${K8S_PROJECT}
     else
-        googleAuthenticationBitBucket
+        googleAuthenticationGithub
     fi
     return $?
+}
+
+googleAuthenticationGithub () {
+    # Github does all the dirty work for us
+    return 0
 }
 
 googleAuthenticationBitBucket () {

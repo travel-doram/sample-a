@@ -9,10 +9,11 @@ WORKDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)"
 CONFIGPATH=$WORKDIR/ci
 if [ -z "$CI" ]; then
     BUILDARGS="--platform linux/amd64"
+    # Authenticate and set env
+    source ${CONFIGPATH}/auth/pre-up.sh
 fi
 
-# Authenticate and set env
-source ${CONFIGPATH}/auth/pre-up.sh
+
 
 function manifestInspect() {
     # Check if image and tag exists on registry and do not run build step if image/tag exists as this is a waste of everyones time
@@ -28,11 +29,5 @@ function manifestInspect() {
 # BUILD IMAGE
 image_name=europe-west4-docker.pkg.dev/ts-infra-demo/private/sample-a
 
-docker build ${BUILDARGS} -t ${image_name}:${BITBUCKET_COMMIT} .
-docker push ${image_name}:${BITBUCKET_COMMIT}
-if [ -z "${BITBUCKET_TAG}" ]; then
-    echo -e "${INFO} Not a deployment, nothing more to do here"
-else
-    docker tag ${image_name}:${BITBUCKET_COMMIT} ${image_name}:${BITBUCKET_TAG}
-    docker push ${image_name}:${BITBUCKET_TAG}
-fi
+docker build ${BUILDARGS} -t ${image_name}:${GITHUB_SHA} .
+docker push ${image_name}:${GITHUB_SHA}
