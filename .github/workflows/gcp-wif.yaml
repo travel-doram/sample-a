@@ -14,7 +14,7 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - name: Check out the repository to the runner
-        uses: actions/checkout@v4          
+        uses: actions/checkout@v4    
       - name: "Auth in GCP"
         id: "auth"
         uses: "google-github-actions/auth@v1"
@@ -29,5 +29,9 @@ jobs:
 
       - name: "build container"
         run: ENVPREFIX=demo ci/build.sh
+      - uses: "google-github-actions/setup-gcloud@v2"
+        with:
+          install_components: "gke-gcloud-auth-plugin"                  
       - name: "Deployment"
         run: ENVPREFIX=demo ci/up.sh
+            
