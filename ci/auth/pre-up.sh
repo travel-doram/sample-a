@@ -17,10 +17,6 @@ source ${ENVFILE}
 set +o allexport
 
 authKubeGcloud () {
-    if ! [ -z "$GITHUB_RUN_ID" ];
-    then 
-        sudo apt-get install google-cloud-cli-gke-gcloud-auth-plugin
-    fi
     gcloud auth configure-docker europe-west4-docker.pkg.dev --quiet
     gcloud container clusters get-credentials ${K8S_CLUSTER} \
         --zone ${K8S_ZONE} --project ${K8S_PROJECT}

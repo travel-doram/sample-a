@@ -9,11 +9,10 @@ WORKDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd)"
 CONFIGPATH=$WORKDIR/ci
 if [ -z "$CI" ]; then
     BUILDARGS="--platform linux/amd64"
-    # Authenticate and set env
-    source ${CONFIGPATH}/auth/pre-up.sh
 fi
 
-
+# Authenticate and set env
+source ${CONFIGPATH}/auth/pre-up.sh
 
 function manifestInspect() {
     # Check if image and tag exists on registry and do not run build step if image/tag exists as this is a waste of everyones time
