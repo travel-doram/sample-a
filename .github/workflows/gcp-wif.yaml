@@ -18,8 +18,8 @@ jobs:
         uses: "google-github-actions/auth@v1"
         with:
           token_format: "access_token"
-          workload_identity_provider: projects/481994439242/locations/global/workloadIdentityPools/github-wif-ts-infra-demo/providers/github-wif-ts-infra-demo
-          service_account: github-wif@ts-infra-demo.iam.gserviceaccount.com
+          workload_identity_provider: projects/481994439242/locations/global/workloadIdentityPools/github-oidc-ts-infra-demo/providers/github-oidc-ts-infra-demo
+          service_account: github-oidc@ts-infra-demo.iam.gserviceaccount.com
 
       - name: "Docker login"
         run: |
