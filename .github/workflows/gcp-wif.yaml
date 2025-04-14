@@ -1,4 +1,4 @@
-name: "Example Workload Identity"
+name: "Build and run"
 
 on:
   push:
@@ -28,3 +28,5 @@ jobs:
         uses: actions/checkout@v4  
       - name: "build container"
         run: ENVPREFIX=demo ci/build.sh
+      - name: "Deployment"
+        run: ENVPREFIX=demo ci/up.sh
