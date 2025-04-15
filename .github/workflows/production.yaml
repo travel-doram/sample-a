@@ -1,0 +1,7 @@
+name: Dev CI/CD Workflow
+jobs:
+  some-job:
+    name: run the job
+    uses: ./.github/workflows/build_deploy.yaml
+    with:
+      environment: "Staging"

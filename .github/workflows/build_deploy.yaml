@@ -1,13 +1,16 @@
-name: "Build and run"
+name: "Build and Deploy"
 
 on:
-  push:
-    branches:
-      - "master"
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
 
 jobs:
   run:
-    name: "Workload Identity Job"
+    name: "Branch Deployment"
+    environment: ${{ inputs.environment}}
     permissions:
       id-token: write
       contents: read
@@ -23,10 +26,10 @@ jobs:
           workload_identity_provider: projects/481994439242/locations/global/workloadIdentityPools/github-oidc-ts-infra-demo/providers/github-oidc-ts-infra-demo
           service_account: github-oidc@ts-infra-demo.iam.gserviceaccount.com
       - name: "build container"
-        run: ENVPREFIX=demo ci/build.sh
+        run: ci/build.sh
       - uses: "google-github-actions/setup-gcloud@v2"
         with:
           install_components: "gke-gcloud-auth-plugin"                  
       - name: "Deployment"
-        run: ENVPREFIX=demo ci/up.sh
+        run: ci/up.sh
             
