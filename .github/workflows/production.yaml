@@ -9,5 +9,8 @@ jobs:
   some-job:
     name: run the job
     uses: ./.github/workflows/build_deploy.yaml
+    permissions:
+        id-token: write
+        contents: read    
     with:
       environment: "Staging"
