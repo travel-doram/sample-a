@@ -10,7 +10,7 @@ on:
 jobs:
   run:
     env:
-      ENVPREFIX: ${{ vars.ENVPREFIX }}
+      ENVPREFIX: ${{ inputs.ENVPREFIX }}
     name: "Branch Deployment"
     runs-on: "ubuntu-latest"
     steps:
