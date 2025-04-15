@@ -10,8 +10,6 @@ on:
 jobs:
   run:
     name: "Branch Deployment"
-    environment: ${{ inputs.environment}}
-
     runs-on: "ubuntu-latest"
     steps:
       - name: Check out the repository to the runner
@@ -24,10 +22,10 @@ jobs:
           workload_identity_provider: projects/481994439242/locations/global/workloadIdentityPools/github-oidc-ts-infra-demo/providers/github-oidc-ts-infra-demo
           service_account: github-oidc@ts-infra-demo.iam.gserviceaccount.com
       - name: "build container"
-        run: ci/build.sh
+        run: ENVPREFIX=${{ vars.ENVPREFIX }} ci/build.sh
       - uses: "google-github-actions/setup-gcloud@v2"
         with:
           install_components: "gke-gcloud-auth-plugin"                  
       - name: "Deployment"
-        run: ci/up.sh
+        run: ENVPREFIX=${{ vars.ENVPREFIX }} ci/up.sh
             
