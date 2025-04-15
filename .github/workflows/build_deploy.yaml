@@ -3,7 +3,7 @@ name: "Build and Deploy"
 on:
   workflow_call:
     inputs:
-      environment:
+      ENVPREFIX:
         required: true
         type: string
 
