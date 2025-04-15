@@ -11,9 +11,7 @@ jobs:
   run:
     name: "Branch Deployment"
     environment: ${{ inputs.environment}}
-    permissions:
-      id-token: write
-      contents: read
+
     runs-on: "ubuntu-latest"
     steps:
       - name: Check out the repository to the runner
