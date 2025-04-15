@@ -9,6 +9,8 @@ on:
 
 jobs:
   run:
+    env:
+      ENVPREFIX: ${{ vars.ENVPREFIX }}
     name: "Branch Deployment"
     runs-on: "ubuntu-latest"
     steps:
@@ -22,10 +24,10 @@ jobs:
           workload_identity_provider: projects/481994439242/locations/global/workloadIdentityPools/github-oidc-ts-infra-demo/providers/github-oidc-ts-infra-demo
           service_account: github-oidc@ts-infra-demo.iam.gserviceaccount.com
       - name: "build container"
-        run: ENVPREFIX=${{ vars.ENVPREFIX }} ci/build.sh
+        run: ci/build.sh
       - uses: "google-github-actions/setup-gcloud@v2"
         with:
           install_components: "gke-gcloud-auth-plugin"                  
       - name: "Deployment"
-        run: ENVPREFIX=${{ vars.ENVPREFIX }} ci/up.sh
+        run: ci/up.sh
             
