@@ -28,5 +28,12 @@ function manifestInspect() {
 # BUILD IMAGE
 image_name=europe-west4-docker.pkg.dev/ts-infra-demo/private/sample-a
 
-docker build ${BUILDARGS} -t ${image_name}:${GITHUB_SHA} .
-docker push ${image_name}:${GITHUB_SHA}
+if [ $(manifestInspect "${image_name}:${GITHUB_SHA}") -eq 1 ];
+then
+    echo -e "${INFO}Upstream contains container with GITHUB_SHA\n"
+    echo -e "${INFO}Doing Nothing\n"
+    exit 0
+else
+    docker build ${BUILDARGS} -t ${image_name}:${GITHUB_SHA} .
+    docker push ${image_name}:${GITHUB_SHA}
+fi
