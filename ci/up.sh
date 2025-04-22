@@ -29,14 +29,9 @@ namespace="ts-public"
 export namespace=${namespace}
 
 
-if [ -z "${BITBUCKET_TAG}" ]
-then
-    image_tag="${BITBUCKET_COMMIT}"
-    export image_tag="${BITBUCKET_COMMIT}"
-else
-    image_tag="${BITBUCKET_TAG}"
-    export image_tag="${BITBUCKET_TAG}"
-fi
+image_tag="${GITHUB_SHA}"
+export image_tag="${GITHUB_SHA}"
+
 
 # Create namespace if it doesn't exist
 kubectl get namespace | grep -q "${namespace}" || kubectl create namespace ${namespace}
