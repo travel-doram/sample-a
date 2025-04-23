@@ -1,11 +1,9 @@
-name: Dev CI/CD Workflow
-
-
+name: Production Build and Deploy
+# Strictly speaking this should occur on tag events so we can rollback and replay tags
 on:
   push:
     branches:
       - master  
-
 
 jobs:
   some-job:

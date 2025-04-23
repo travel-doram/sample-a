@@ -1,4 +1,4 @@
-name: "Build and Deploy"
+name: "Shared Workflow"
 
 on:
   workflow_call:
